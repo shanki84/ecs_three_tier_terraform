@@ -7,35 +7,7 @@ Terraform allows you to keep your infrastructure in code form and was developed 
 Terraform workspaces:
 Terraform workspaces allow you to maintain separate state files for the same configuration with the compatibility of the remote backend like AWS s3, helping in managing terraform state file in a shared and large team.
 
-+---modules
-|   +---ecs
-|   |       asg.tf
-|   |       iam.tf
-|   |       instance.tf
-|   |       providers.tf
-|   |       sg.tf
-|   |       variables.tf
-|   |       vpc.tf
-|   |       workstation-external-ip.tf
-|   |
-|   +---nlb
-|   |       internal_nlb
-|   |       route53.tf
-|   |       variables.tf
-|   |
-|   \---rds
-|           datasource.tf
-|           instance.tf
-|           sg.tf
-|           terraform.tfvars
-|           user.tfvars
-|           variables.tf
-|           vpc.tf
-|
-\---workspace
-        main.tf
-        state_import.tf
-        vars.tf
+![image](https://user-images.githubusercontent.com/31502997/112706774-6bd48980-8e9e-11eb-9da1-fa7042e044f1.png)
 
 
 workspaces allow you to separate your state and infrastructure without changing anything in your code.
