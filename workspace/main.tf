@@ -24,6 +24,7 @@ module "route53" {
 }
 
 module "rds" {
+  source      = "../modules/rds"
   allocated_storage  = "${var.allocated_storage}"
   engine_version     = "${var.engine_version}"
   instance_type      = "${var.instance_type}"
