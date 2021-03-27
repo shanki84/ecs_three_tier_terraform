@@ -1,0 +1,31 @@
+resource "aws_lb" "ecs_asg" {
+name                        = "${var.env}-internal-nlb"
+internal                    = true
+load_balancer_type          = "network"
+subnet                      = ["${aws_subnet.private.*.id}"]
+enable_deletion_protection  = false
+
+tags = "${
+  map(
+    "Name", "${var.env}-internal-nlb"
+    "Role", "Network Load Balancer"
+    )
+  }"
+}
+
+resource "aws_lb_target_group" "ecs_tgt" {
+  name        = "${var.env}-lb-tg"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.ecs.id
+}
+
+resource "aws_lb_listener" "ecs_listener" {
+  load_balancer_arn = aws_lb.ecs_asg.id
+
+  default_action {
+    target_group_arn = aws_lb_target_group.ecs_tgt.id
+    type             = "forward"
+  }
+}
