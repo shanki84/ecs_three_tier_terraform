@@ -1,21 +1,3 @@
-resource "aws_security_group" "default" {
-  name        = "terraform_security_group"
-  description = "Terraform example security group"
-  vpc_id      = "${aws_vpc.vpc.id}"
-
-  # Allow outbound internet access.
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "terraform-example-security-group"
-  }
-}
-
 resource "aws_security_group" "rds" {
   name        = "terraform_rds_security_group"
   description = "Terraform example RDS MySQL server"
@@ -25,20 +7,16 @@ resource "aws_security_group" "rds" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.default.id}"]
+    security_groups = ["${aws_security_group.ecs.id}"]
   }
-  # Allow all outbound traffic.
+  # Allow outbound internet access.
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-tags = merge(
-  var.default_tags,
-  map(
-    "Name", "${var.default_tags["env"]}-rds-sg",
-    "Role", "SG",
-  )
-)
+  tags {
+    Name = "${var.env}-rds-sg"
+  }
 }

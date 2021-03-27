@@ -24,10 +24,21 @@ module "route53" {
 }
 
 module "rds" {
-  source      = "../modules/rds"
-  allocated_storage  = "${var.allocated_storage}"
-  engine_version     = "${var.engine_version}"
-  instance_type      = "${var.instance_type}"
-  subnet_ids         = ["${aws_subnet.rds.*.id}"]
-  vpc_id             = "${aws_vpc.rds_db.id}"
+  source              = "../modules/rds"
+  resource_tag_name   = "${var.resource_tag_name}
+  namespace           = "${var.namespace}
+  region              = "${var.region}
+  allocated_storage   = "${var.allocated_storage}"
+  engine_version      = "${var.engine_version}"
+  instance_type       = "${var.instance_type}"
+  subnet_ids          = ["${aws_subnet.rds.*.id}"]
+  vpc_id              = "${aws_vpc.rds_db.id}"
+    route = [
+      {
+        cidr_block     = "0.0.0.0/0"
+        gateway_id     = module.rds.vpc.gateway_id
+        instance_id    = null
+        nat_gateway_id = null
+      }
+    ]
 }

@@ -9,20 +9,6 @@ resource "aws_vpc" "rds_db" {
   }"
 }
 
-resource "aws_internet_gateway" "gateway" {
-  vpc_id = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name = "${var.env}-rds-internet-gateway"
-  }
-}
-
-resource "aws_route" "route" {
-  route_table_id         = "${aws_vpc.vpc.main_route_table_id}"
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = "${aws_internet_gateway.gateway.id}"
-}
-
 resource "aws_subnet" "rds" {
   count                   = "${length(data.aws_availability_zones.available.names)}"
   vpc_id                  = "${aws_vpc.rds_db.id}"
@@ -34,7 +20,37 @@ resource "aws_subnet" "rds" {
   }
 }
 
-resource "aws_db_subnet_group" "default" {
+resource "aws_internet_gateway" "gateway" {
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.env}-rds-internet-gateway"
+  }
+}
+
+resource "aws_route_table" "rds" {
+  vpc_id = aws_vpc.rds_db.id
+
+  dynamic "route" {
+    for_each = var.route
+
+    content {
+      cidr_block     = route.value.cidr_block
+      gateway_id     = route.value.gateway_id
+      instance_id    = route.value.instance_id
+      nat_gateway_id = route.value.nat_gateway_id
+    }
+  }
+}
+
+resource "aws_route_table_association" "rds" {
+  count          = length(var.subnet_ids)
+
+  subnet_id      = element(var.subnet_ids, count.index)
+  route_table_id = aws_route_table.rds.id
+}
+
+resource "aws_db_subnet_group" "rds" {
   name        = "${var.rds_instance_identifier}-subnet-group"
   description = "Terraform example RDS subnet group"
   subnet_ids  = ["${aws_subnet.rds.*.id}"]
