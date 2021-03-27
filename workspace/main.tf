@@ -1,5 +1,5 @@
 module "my_ecs" {
-  source                = "../modules/eks"
+  source                = "../modules/ecs"
   env                   = "${var.env[terraform.workspace]}"
   cidr-vpc              = "${var.cidr-vpc[terraform.workspace]}"
   cidr-subnet           = "${var.cidr-subnet[terraform.workspace]}"
