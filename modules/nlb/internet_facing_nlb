@@ -1,13 +1,13 @@
 resource "aws_lb" "ecs_asg" {
-name                        = "${var.env}-internal-nlb"
-internal                    = true
+name                        = "${var.env}-internet-facing-nlb"
+internal                    = false
 load_balancer_type          = "network"
-subnet                      = ["${aws_subnet.private.*.id}"]
-enable_deletion_protection  = false
+subnet                      = ["${aws_subnet.public.*.id}"]
+enable_deletion_protection  = true
 
 tags = "${
   map(
-    "Name", "${var.env}-internal-nlb"
+    "Name", "${var.env}-internet-facing-nlb"
     "Role", "Network Load Balancer"
     )
   }"

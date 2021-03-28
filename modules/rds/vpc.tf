@@ -13,7 +13,7 @@ resource "aws_subnet" "rds" {
   count                   = "${length(data.aws_availability_zones.available.names)}"
   vpc_id                  = "${aws_vpc.rds_db.id}"
   cidr_block              = "10.0.${length(data.aws_availability_zones.available.names) + count.index}.0/24"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
   availability_zone       = "${element(data.aws_availability_zones.available.names, count.index)}"
   tags {
     Name = "rds-${element(data.aws_availability_zones.available.names, count.index)}"
@@ -51,7 +51,6 @@ resource "aws_route_table_association" "rds" {
 }
 
 resource "aws_db_subnet_group" "rds" {
-  name        = "${var.rds_instance_identifier}-subnet-group"
-  description = "Terraform example RDS subnet group"
+  name        = "${var.env}-rds-subnet-group"
   subnet_ids  = ["${aws_subnet.rds.*.id}"]
 }
