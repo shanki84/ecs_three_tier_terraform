@@ -16,16 +16,21 @@ variable "env" {
 
 # ---- Network -------------- #
 variable "cidr-vpc" {
-  type = map(any)
-  default = {
-    nonprod     = "10.43.21.0/24"
-    prod        = "10.43.30.0/24"
+  default = "10.0.0.0/16"
 }
-variable "cidr-subnet" {
+variable "cidr-private-subnet" {
   type = map(any)
   default = {
-    nonprod     = "10.43.21"
-    prod        = "10.43.30"
+    nonprod = "10.43.22"
+    prod    = "10.43.20"
+  }
+}
+variable "cidr-public-subnet" {
+  type = map(any)
+  default = {
+    nonprod = "10.43.23"
+    prod    = "10.43.21"
+  }
 }
 
 # ---- Auto Scalling Group ---- #

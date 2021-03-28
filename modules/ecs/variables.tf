@@ -12,8 +12,12 @@ variable "cidr-vpc" {
   description = "The VPC the instance(s) will go in"
 }
 
-variable "cidr-subnet" {
-  description = "The VPC subnet the instance(s) will go in"
+variable "cidr-private-subnet" {
+  description = "The VPC private subnet the instance(s) will go in"
+}
+
+variable "cidr-private-subnet" {
+  description = "The VPC public subnet the instance(s) will go in"
 }
 
 variable "aws_region" {

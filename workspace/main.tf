@@ -1,7 +1,9 @@
 module "my_ecs" {
   source                = "../modules/ecs"
   env                   = "${var.env[terraform.workspace]}"
-  cidr-vpc              = "${var.cidr-vpc[terraform.workspace]}"
+  cidr-vpc              = "${var.cidr-vpc}"
+  cidr-private-subnet   = "${var.cidr-private-subnet[terraform.workspace]}"
+  cidr-public-subnet    = "${var.cidr-public-subnet[terraform.workspace]}"
   cidr-subnet           = "${var.cidr-subnet[terraform.workspace]}"
   image-id              = "${var.image-id}"
   number_of_instances   = "${var.number_of_instances}"

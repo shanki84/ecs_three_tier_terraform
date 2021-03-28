@@ -1,6 +1,6 @@
 # VPC Resources
 #  * VPC
-#  * Subnets
+#  * Subnets Public & Private
 #  * Internet Gateway
 #  * Route Table
 
@@ -19,21 +19,36 @@ resource "aws_subnet" "private" {
   count = 3
 
   availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
-  cidr_block        = "${var.cidr-subnet}.${count.index*64}/26"
+  cidr_block        = "${cidr-private-subnet}.${count.index*64}/24"
   vpc_id            = "${aws_vpc.ecs.id}"
+  map_public_ip_on_launch = "false" //it makes this a private subnet
 
   tags = "${
     map(
-      "Name", "${var.env}-SG-Subnet-0${count.index+1}",
+      "Name", "${var.env}-Private-Subnet-0${count.index+1}",
     )
   }"
 }
 
+resource "aws_subnet" "public" {
+  count = 3
+
+  availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
+  cidr_block        = "${cidr-public-subnet}.${count.index*64}/24"
+  vpc_id            = "${aws_vpc.ecs.id}"
+  map_public_ip_on_launch = "true" //it makes this a public subnet
+
+  tags = "${
+    map(
+      "Name", "${var.env}-Public-Subnet-0${count.index+1}",
+    )
+  }"
+}
 resource "aws_internet_gateway" "ecs" {
   vpc_id = "${aws_vpc.demo.id}"
 
   tags = {
-    Name = "${var.env}-SG-GW"
+    Name = "${var.env}-IGW"
   }
 }
 
