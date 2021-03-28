@@ -7,7 +7,7 @@ Terraform allows you to keep your infrastructure in code form and was developed 
 Terraform workspaces:
 Terraform workspaces allow you to maintain separate state files for the same configuration with the compatibility of the remote backend like AWS s3, helping in managing terraform state file in a shared and large team.
 
-![image](https://user-images.githubusercontent.com/31502997/112706774-6bd48980-8e9e-11eb-9da1-fa7042e044f1.png)
+![image](https://user-images.githubusercontent.com/31502997/112740362-4f0a8580-8f74-11eb-9b7e-e10a30e30853.png)
 
 
 workspaces allow you to separate your state and infrastructure without changing anything in your code.
