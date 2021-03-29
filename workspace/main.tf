@@ -16,10 +16,19 @@ module "my_ecs" {
   bucket_path           = "${bucket_path[terraform.workspace]}"
 }
 
+module "nlb" {
+  source                = "../modules/nlb"
+  load_balancer_type    = "network"
+  internal              = false
+  env                   = "${var.env[terraform.workspace]}"
+  vpc_id                = aws_vpc.ecs.id
+  subnets               = aws_security_group.ecs_sg.id
+  security_groups       = modules.ecs.aws_security_group.ecs_sg.id
+}
+
 module "route53" {
   source      = "../modules/nlb"
   zone_id     = data.aws_route53_zone.hostzone_id
-  lb_arm_dns  = module.nlb.aws_lb_dns
   record_name = "${var.default_tags["env"]}-NLB"
   env         = "${var.env[terraform.workspace]}"
   vpc_id      = aws_vpc.ecs.id
