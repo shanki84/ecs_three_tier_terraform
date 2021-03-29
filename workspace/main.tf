@@ -36,9 +36,9 @@ module "route53" {
 
 module "rds" {
   source              = "../modules/rds"
-  resource_tag_name   = "${var.resource_tag_name}
-  namespace           = "${var.namespace}
-  region              = "${var.region}
+  resource_tag_name   = "${var.resource_tag_name}"
+  namespace           = "${var.namespace}"
+  region              = "${var.region}"
   allocated_storage   = "${var.allocated_storage}"
   engine_version      = "${var.engine_version}"
   instance_type       = "${var.instance_type}"
